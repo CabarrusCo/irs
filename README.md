@@ -18,7 +18,7 @@ Our team is responsible for software development and support for the [County](ht
 
 ### About
 ---
-At Cabarrus County we use the IRS mileage for travel rates and reimbursement. The problem we kept encountering is that the IRS has no API for this data. In the past we've had to manually enter this data somewhere at a central location. Each year the IRS updates the new mileage rate. This go package scrapes the data located [here](https://www.irs.gov/tax-professionals/standard-mileage-rates). and returns the inofmration
+At Cabarrus County we use the IRS mileage for travel rates and reimbursement. The problem we kept encountering is that the IRS has no API for this data. In the past we've had to manually enter this data somewhere at a central location. Each year the IRS updates the new mileage rate. This go package scrapes the data located [here](https://www.irs.gov/tax-professionals/standard-mileage-rates). and returns the information as a struct.
 
 ### How it Works
 ---
@@ -27,9 +27,11 @@ This package uses Soup to scrape the IRS table and finds the nearest indexes for
 ### Getting started
 ---
 ```go get -u github.com/CabarrusCo/irsmileagescraper```
-```
 
-### Getting started
+## Full example
 ---
-```go get -u github.com/CabarrusCo/irsmileagescraper```
-```
+Coming soon
+
+### API Example
+---
+An example of how we use this as a real time, queryable API is coming soon!

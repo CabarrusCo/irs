@@ -18,7 +18,7 @@ Our team is responsible for software development and support for the [County](ht
 
 ### About
 ---
-At Cabarrus County we use the IRS mileage for travel rates and reimbursement. The problem we kept encountering is that the IRS has no API for this data. In the past we've had to manually enter this data somewhere at a central location. Each year the IRS updates the new mileage rate. This go package scrapes the data located [here](https://www.irs.gov/tax-professionals/standard-mileage-rates). and returns the information as a struct.
+At Cabarrus County we use the IRS mileage for travel rates and reimbursement. The problem we kept encountering is that the IRS has no API for this data and updates the rate once a year. In the past we've had to manually enter this data somewhere at a central location. This Go package scrapes the data located [here](https://www.irs.gov/tax-professionals/standard-mileage-rates). and returns the information as a struct.
 
 ### How it Works
 ---

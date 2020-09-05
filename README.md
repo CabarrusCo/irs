@@ -30,7 +30,25 @@ This package uses Soup to scrape the IRS table and finds the nearest indexes for
 
 ## Full example
 ---
-Coming soon
+```
+package main
+
+import (
+	"fmt"
+
+	"github.com/CabarrusCo/irsmileagescraper"
+)
+
+func main() {
+	mileageData, err := irsmileagescraper.GrabMileageByYear(2019)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Printf("%+v", mileageData)
+}
+```
 
 ### API Example
 ---

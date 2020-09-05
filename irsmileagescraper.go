@@ -13,6 +13,25 @@ type irsResponse struct {
 	MedicalMoving string `json:"medicalMoving"`
 }
 
+func validateIRSResponse(br string, cr string, mm string) error {
+	_, err := strconv.ParseFloat(br, 32)
+	if err != nil {
+		return err
+	}
+
+	_, err = strconv.ParseFloat(cr, 32)
+	if err != nil {
+		return err
+	}
+
+	_, err = strconv.ParseFloat(mm, 32)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func GrabMileageByYear(year int) (irsResponse, error) {
 	var ir irsResponse
 
@@ -37,6 +56,12 @@ func GrabMileageByYear(year int) (irsResponse, error) {
 
 	for _, v := range mileageRatesStrong {
 		if v.Text() == yearString {
+
+			err := validateIRSResponse(mileageRates[indexCount].Text(), mileageRates[indexCount+1].Text(), mileageRates[indexCount+2].Text())
+			if err != nil {
+				return ir, err
+			}
+
 			ir.BusinessRate = mileageRates[indexCount].Text()
 			ir.CharityRate = mileageRates[indexCount+1].Text()
 			ir.MedicalMoving = mileageRates[indexCount+2].Text()
@@ -48,6 +73,12 @@ func GrabMileageByYear(year int) (irsResponse, error) {
 
 	for _, v := range mileageRatesBold {
 		if v.Text() == yearString {
+
+			err := validateIRSResponse(mileageRates[indexCount].Text(), mileageRates[indexCount+1].Text(), mileageRates[indexCount+2].Text())
+			if err != nil {
+				return ir, err
+			}
+
 			ir.BusinessRate = mileageRates[indexCount].Text()
 			ir.CharityRate = mileageRates[indexCount+1].Text()
 			ir.MedicalMoving = mileageRates[indexCount+2].Text()

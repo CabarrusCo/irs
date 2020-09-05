@@ -8,28 +8,34 @@ import (
 )
 
 type irsResponse struct {
-	BusinessRate  string `json:"businessRate"`
-	CharityRate   string `json:"charityRate"`
-	MedicalMoving string `json:"medicalMoving"`
+	BusinessRate  float32 `json:"businessRate"`
+	CharityRate   float32 `json:"charityRate"`
+	MedicalMoving float32 `json:"medicalMoving"`
 }
 
-func validateIRSResponse(br string, cr string, mm string) error {
-	_, err := strconv.ParseFloat(br, 32)
+func validateAndSetIRSResponse(br string, cr string, mm string) (irsResponse, error) {
+	var ir irsResponse
+
+	brFloat, err := strconv.ParseFloat(br, 32)
 	if err != nil {
-		return err
+		return ir, err
 	}
 
-	_, err = strconv.ParseFloat(cr, 32)
+	crFloat, err := strconv.ParseFloat(cr, 32)
 	if err != nil {
-		return err
+		return ir, err
 	}
 
-	_, err = strconv.ParseFloat(mm, 32)
+	mmFloat, err := strconv.ParseFloat(mm, 32)
 	if err != nil {
-		return err
+		return ir, err
 	}
 
-	return nil
+	ir.BusinessRate = float32(brFloat)
+	ir.CharityRate = float32(crFloat)
+	ir.MedicalMoving = float32(mmFloat)
+
+	return ir, nil
 }
 
 func GrabMileageByYear(year int) (irsResponse, error) {
@@ -56,15 +62,10 @@ func GrabMileageByYear(year int) (irsResponse, error) {
 
 	for _, v := range mileageRatesStrong {
 		if v.Text() == yearString {
-
-			err := validateIRSResponse(mileageRates[indexCount].Text(), mileageRates[indexCount+1].Text(), mileageRates[indexCount+2].Text())
+			ir, err = validateAndSetIRSResponse(mileageRates[indexCount].Text(), mileageRates[indexCount+1].Text(), mileageRates[indexCount+2].Text())
 			if err != nil {
 				return ir, err
 			}
-
-			ir.BusinessRate = mileageRates[indexCount].Text()
-			ir.CharityRate = mileageRates[indexCount+1].Text()
-			ir.MedicalMoving = mileageRates[indexCount+2].Text()
 			return ir, nil
 		}
 
@@ -73,15 +74,10 @@ func GrabMileageByYear(year int) (irsResponse, error) {
 
 	for _, v := range mileageRatesBold {
 		if v.Text() == yearString {
-
-			err := validateIRSResponse(mileageRates[indexCount].Text(), mileageRates[indexCount+1].Text(), mileageRates[indexCount+2].Text())
+			ir, err = validateAndSetIRSResponse(mileageRates[indexCount].Text(), mileageRates[indexCount+1].Text(), mileageRates[indexCount+2].Text())
 			if err != nil {
 				return ir, err
 			}
-
-			ir.BusinessRate = mileageRates[indexCount].Text()
-			ir.CharityRate = mileageRates[indexCount+1].Text()
-			ir.MedicalMoving = mileageRates[indexCount+2].Text()
 			return ir, nil
 		}
 

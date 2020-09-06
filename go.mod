@@ -1,4 +1,4 @@
-module github.com/CabarrusCo/irsmileagescraper
+module github.com/CabarrusCo/irs
 
 go 1.14
 

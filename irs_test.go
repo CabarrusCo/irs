@@ -1,4 +1,4 @@
-package irsmileagescraper
+package irs
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 func TestScraper(t *testing.T) {
 	year, _, _ := time.Now().Date()
 
-	mileageRates, err := GrabMileageByYear(year)
+	mileageRates, err := GrabStandardMileageRatesByYear(year)
 	if err != nil {
 		t.Errorf("Error encountered in Scrape Test %s", err)
 	}

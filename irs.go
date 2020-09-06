@@ -1,4 +1,4 @@
-package irsmileagescraper
+package irs
 
 import (
 	"fmt"
@@ -7,48 +7,50 @@ import (
 	"github.com/anaskhan96/soup"
 )
 
-type irsResponse struct {
+type standardMileageRates struct {
+	Year          int     `json:"year"`
 	BusinessRate  float32 `json:"businessRate"`
 	CharityRate   float32 `json:"charityRate"`
 	MedicalMoving float32 `json:"medicalMoving"`
 }
 
-func validateAndSetIRSResponse(br string, cr string, mm string) (irsResponse, error) {
-	var ir irsResponse
+func validateAndSetMileageRatesByYear(year int, br string, cr string, mm string) (standardMileageRates, error) {
+	var smr standardMileageRates
 
 	brFloat, err := strconv.ParseFloat(br, 32)
 	if err != nil {
-		return ir, err
+		return smr, err
 	}
 
 	crFloat, err := strconv.ParseFloat(cr, 32)
 	if err != nil {
-		return ir, err
+		return smr, err
 	}
 
 	mmFloat, err := strconv.ParseFloat(mm, 32)
 	if err != nil {
-		return ir, err
+		return smr, err
 	}
 
-	ir.BusinessRate = float32(brFloat)
-	ir.CharityRate = float32(crFloat)
-	ir.MedicalMoving = float32(mmFloat)
+	smr.Year = year
+	smr.BusinessRate = float32(brFloat)
+	smr.CharityRate = float32(crFloat)
+	smr.MedicalMoving = float32(mmFloat)
 
-	return ir, nil
+	return smr, nil
 }
 
-func GrabMileageByYear(year int) (irsResponse, error) {
-	var ir irsResponse
+func GrabStandardMileageRatesByYear(year int) (standardMileageRates, error) {
+	var smr standardMileageRates
 
 	yearString := strconv.Itoa(year)
 	if len(yearString) != 4 {
-		return ir, fmt.Errorf("Year passed is not 4 in length")
+		return smr, fmt.Errorf("Year passed is not 4 in length")
 	}
 
 	resp, err := soup.Get("https://www.irs.gov/tax-professionals/standard-mileage-rates")
 	if err != nil {
-		return ir, fmt.Errorf("Error returned during initial connection of scrape attempt %v", err)
+		return smr, fmt.Errorf("Error returned during initial connection of scrape attempt %v", err)
 	}
 
 	doc := soup.HTMLParse(resp)
@@ -62,11 +64,11 @@ func GrabMileageByYear(year int) (irsResponse, error) {
 
 	for _, v := range mileageRatesStrong {
 		if v.Text() == yearString {
-			ir, err = validateAndSetIRSResponse(mileageRates[indexCount].Text(), mileageRates[indexCount+1].Text(), mileageRates[indexCount+2].Text())
+			smr, err = validateAndSetMileageRatesByYear(year, mileageRates[indexCount].Text(), mileageRates[indexCount+1].Text(), mileageRates[indexCount+2].Text())
 			if err != nil {
-				return ir, err
+				return smr, err
 			}
-			return ir, nil
+			return smr, nil
 		}
 
 		indexCount = indexCount + 5
@@ -74,15 +76,15 @@ func GrabMileageByYear(year int) (irsResponse, error) {
 
 	for _, v := range mileageRatesBold {
 		if v.Text() == yearString {
-			ir, err = validateAndSetIRSResponse(mileageRates[indexCount].Text(), mileageRates[indexCount+1].Text(), mileageRates[indexCount+2].Text())
+			smr, err = validateAndSetMileageRatesByYear(year, mileageRates[indexCount].Text(), mileageRates[indexCount+1].Text(), mileageRates[indexCount+2].Text())
 			if err != nil {
-				return ir, err
+				return smr, err
 			}
-			return ir, nil
+			return smr, nil
 		}
 
 		indexCount = indexCount + 5
 	}
 
-	return ir, fmt.Errorf("Unable to find year in IRS table")
+	return smr, fmt.Errorf("Unable to find year in IRS table")
 }

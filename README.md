@@ -26,7 +26,7 @@ This package uses Soup to scrape the IRS table and finds the nearest indexes for
 
 ### Getting started
 ---
-```go get -u github.com/CabarrusCo/irsmileagescraper```
+```go get -u github.com/CabarrusCo/irs```
 
 ## Full example
 ---

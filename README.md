@@ -1,4 +1,4 @@
-# IRS Mileage Scraper
+# IRS Scraper
 
 ### About Cabarrus County
 ---
@@ -34,19 +34,28 @@ This package uses Soup to scrape the IRS table and finds the nearest indexes for
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
-	"github.com/CabarrusCo/irsmileagescraper"
+	"github.com/CabarrusCo/irs"
 )
 
 func main() {
-	mileageData, err := irsmileagescraper.GrabMileageByYear(2019)
+	mileageData, err := irs.GrabStandardMileageRatesByYear(2020)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Printf("%+v", mileageData)
+	fmt.Printf("%+v\n\n", mileageData)
+
+	jsonMileage, err := json.Marshal(mileageData)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(string(jsonMileage))
 }
 ```
 
